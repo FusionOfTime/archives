@@ -1,0 +1,21 @@
+{% extends "includes/base.html" %}
+{% block title %}Список голосований{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center">Список голосований</h1>
+    <p class="voting-count text-center">Количество голосований: {{ voting_count }}</p>
+     {% if user.is_authenticated %}
+          <ul class="list-group">
+            {% for voting in votings %}
+                <li class="list-group-item">
+                    <a href="{% url 'view_voting' voting_id=voting.id %}">{{ voting.question }}</a><br>
+                    <small><strong>Автор:</strong> {% if voting.is_anonymous %}Анонимный{% else %}{{ voting.creator.username }}{% endif %}</small>
+                </li>
+            {% endfor %}
+            </ul>
+           <a href="{% url 'create_voting' %}" class="btn btn-primary mt-3">Создать голосование</a>
+      {% else %}
+         <p>Пожалуйста, <a href="{% url 'login' %}">авторизуйтесь</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a></p>
+     {% endif %}
+</div>
+{% endblock %}

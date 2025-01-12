@@ -1,0 +1,14 @@
+{% extends "includes/base.html" %}
+
+{% block title %}Главная страница голосований{% endblock %}
+
+{% block content %}
+<div class="card mt-5">
+    <div class="card-body text-center">
+        <h1 class="card-title">Добро пожаловать на страницу голосований</h1>
+        <p>Выберите действие:</p>
+        <a href="{% url 'create_voting' %}" class="btn btn-primary btn-lg m-2">Создать голосование</a>
+        <a href="{% url 'list_votings' %}" class="btn btn-secondary btn-lg m-2">Список голосований</a>
+    </div>
+</div>
+{% endblock %}

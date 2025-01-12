@@ -1,0 +1,25 @@
+ {% extends "includes/base.html" %}
+
+     {% block title %}Статус жалоб{% endblock %}
+
+     {% block content %}
+     <div class="card mt-5">
+         <div class="card-body">
+             <h1 class="card-title text-center">Статус жалоб</h1>
+             {% if user.is_authenticated %}
+              <ul class="list-group">
+                 {% for complaint in complaints %}
+                     <li class="list-group-item">
+                         <strong>Заголовок:</strong> {{ complaint.title }}<br>
+                         <strong>Описание:</strong> {{ complaint.description }}<br>
+                         <strong>Статус:</strong> {{ complaint.status }}<br>
+                         <strong>Дата создания:</strong> {{ complaint.created_at }}
+                     </li>
+                 {% endfor %}
+              </ul>
+             {% else %}
+               <p>Пожалуйста, <a href="{% url 'login' %}">авторизуйтесь</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a></p>
+             {% endif %}
+         </div>
+     </div>
+     {% endblock %}

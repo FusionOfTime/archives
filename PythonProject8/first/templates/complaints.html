@@ -1,0 +1,18 @@
+ {% extends "includes/base.html" %}
+
+     {% block title %}Жалобы{% endblock %}
+
+     {% block content %}
+     <div class="card mt-5">
+         <div class="card-body text-center">
+           {% if user.is_authenticated %}
+             <h1 class="card-title">Жалобы</h1>
+             <p>Выберите действие:</p>
+             <a href="{% url 'create_complaint' %}" class="btn btn-primary btn-lg m-2">Создать жалобу</a>
+             <a href="{% url 'complaint_status' %}" class="btn btn-secondary btn-lg m-2">Статус жалоб</a>
+           {% else %}
+               <p>Пожалуйста, <a href="{% url 'login' %}">авторизуйтесь</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a></p>
+           {% endif %}
+         </div>
+     </div>
+     {% endblock %}

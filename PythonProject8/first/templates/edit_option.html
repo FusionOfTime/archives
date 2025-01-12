@@ -1,0 +1,19 @@
+{% extends "includes/base.html" %}
+
+{% block title %}Редактирование варианта{% endblock %}
+
+{% block content %}
+<div class="card mt-5">
+    <div class="card-body">
+        <h1 class="card-title text-center">Редактирование варианта</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="option">Вариант:</label>
+                <input type="text" id="option" name="option" value="{{ option.text }}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

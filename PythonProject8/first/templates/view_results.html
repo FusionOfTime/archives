@@ -1,0 +1,21 @@
+{% extends "includes/base.html" %}
+
+ {% block title %}Результаты голосования{% endblock %}
+
+ {% block content %}
+ <div class="card mt-5">
+     <div class="card-body">
+         <h1 class="card-title text-center">Результаты голосования</h1>
+          {% if user.is_authenticated %}
+           <ul class="list-group">
+                 {% for option, votes in results.items %}
+                    <li class="list-group-item">{{ option }}: {{ votes }} голосов</li>
+                 {% endfor %}
+            </ul>
+            <a href="{% url 'view_voting' voting_id=voting.id %}" class="btn btn-primary btn-block mt-3">Вернуться к голосованию</a>
+         {% else %}
+              <p>Пожалуйста, <a href="{% url 'login' %}">авторизуйтесь</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a></p>
+        {% endif %}
+    </div>
+ </div>
+ {% endblock %}

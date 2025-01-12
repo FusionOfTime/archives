@@ -1,0 +1,64 @@
+{% extends "includes/base.html" %}
+
+     {% block title %}Создание голосования{% endblock %}
+
+     {% block content %}
+     <div class="card mt-5">
+         <div class="card-body">
+            {% if user.is_authenticated %}
+             <h1 class="card-title text-center">Создание голосования</h1>
+             <form method="post" id="votingForm">
+                 {% csrf_token %}
+                 <div class="form-group">
+                     <label for="question">Вопрос:</label>
+                     <input type="text" id="question" name="question" class="form-control">
+                 </div>
+                 <div class="form-group">
+                     <label for="voting_type">Тип голосования:</label>
+                     <select id="voting_type" name="voting_type" class="form-control">
+                         <option value="single">Один вариант</option>
+                         <option value="multiple">Много вариантов</option>
+                     </select>
+                 </div>
+                 <div class="form-group">
+                     <label for="is_anonymous">Анонимное голосование:</label>
+                     <input type="checkbox" id="is_anonymous" name="is_anonymous">
+                 </div>
+                 <div id="optionsContainer" class="form-group">
+                     <label for="option1">Вариант 1:</label>
+                     <input type="text" id="option1" name="options" class="form-control">
+                 </div>
+                 <button type="button" class="btn btn-secondary" id="addOptionButton">Добавить вариант</button>
+                 <button type="submit" class="btn btn-primary btn-block mt-3">Создать</button>
+              </form>
+              {% else %}
+                  <p>Пожалуйста, <a href="{% url 'login' %}">авторизуйтесь</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a></p>
+              {% endif %}
+         </div>
+     </div>
+
+     <script>
+         document.addEventListener('DOMContentLoaded', function () {
+             const optionsContainer = document.getElementById('optionsContainer');
+             const addOptionButton = document.getElementById('addOptionButton');
+             let optionCount = 1;
+             const maxOptions = 15;
+
+             addOptionButton.addEventListener('click', function () {
+                 if (optionCount < maxOptions) {
+                     optionCount++;
+                     const newOptionDiv = document.createElement('div');
+                     newOptionDiv.classList.add('form-group');
+                     newOptionDiv.innerHTML = `
+                         <label for="option${optionCount}">Вариант ${optionCount}:</label>
+                         <input type="text" id="option${optionCount}" name="options" class="form-control">
+                     `;
+                     optionsContainer.appendChild(newOptionDiv);
+                     if (optionCount === maxOptions) {
+                         addOptionButton.disabled = true;
+                     }
+                 }
+             });
+         });
+     </script>
+     {% endblock %}

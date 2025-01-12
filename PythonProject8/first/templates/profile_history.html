@@ -1,0 +1,20 @@
+{% extends "includes/base.html" %}
+
+{% block title %}История активности{% endblock %}
+
+{% block content %}
+<div class="card mt-5">
+    <div class="card-body">
+        <h1 class="card-title text-center">История активности</h1>
+        <ul class="list-group">
+            {% for voting, options in grouped_votes.items %}
+                <li class="list-group-item">
+                    <strong>Голосование:</strong> <a href="{% url 'view_voting' voting_id=voting.id %}">{{ voting }}</a><br>
+                    <strong>Автор:</strong> {{ voting.creator.username }}<br>
+                    <strong>Выбранные варианты:</strong> {{ options|join:", " }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

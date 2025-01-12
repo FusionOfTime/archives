@@ -1,0 +1,86 @@
+{% extends "includes/base.html" %}
+{% block title %}Просмотр голосования{% endblock %}
+{% block content %}
+<div class="card mt-5">
+    <div class="card-body">
+        <h1 class="card-title text-center">{{ voting.question }}</h1>
+        <p class="text-center"><strong>Автор:</strong> {% if voting.is_anonymous %}Анонимный{% else %}{{ voting.creator.username }}{% endif %}</p>
+
+        {% if user.is_authenticated %}
+         <form method="post" id="votingForm">
+            {% csrf_token %}
+            <div class="form-group">
+                {% if voting.voting_type == 'single' %}
+                    {% for option in options %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="vote" id="option{{ option.id }}" value="{{ option.id }}" {% if option.id in previous_option_ids %}checked{% endif %}>
+                            <label class="form-check-label" for="option{{ option.id }}">
+                                {{ option.text }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                {% elif voting.voting_type == 'multiple' %}
+                    {% for option in options %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="vote" id="option{{ option.id }}" value="{{ option.id }}" {% if option.id in previous_option_ids %}checked{% endif %}>
+                            <label class="form-check-label" for="option{{ option.id }}">
+                                {{ option.text }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="voteButton" disabled>Голосовать</button>
+        </form>
+        {% else %}
+             <p>Пожалуйста, <a href="{% url 'login' %}">авторизуйтесь</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a></p>
+         {% endif %}
+        <div class="text-center mt-4">
+           <p><strong>Лайки:</strong> {{ voting.likes.count }}</p>
+           <a href="{% url 'add_likes' voting_id=voting.id %}" class="btn btn-success">Лайкнуть</a>
+        </div>
+         {% if user.is_authenticated %}
+         <div class="mt-4">
+            <h4>Добавить комментарий</h4>
+            <form method="post" action="{% url 'add_comment' voting_id=voting.id %}">
+               {% csrf_token %}
+               <div class="form-group">
+                    <textarea name="text" class="form-control" rows="3" required></textarea>
+               </div>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        </div>
+
+        <div class="mt-4">
+            <h3>Комментарии</h3>
+            <ul class="list-group">
+                {% for comment in voting.comments.all %}
+                    <li class="list-group-item">
+                        <strong>{{ comment.user.username }}:</strong> {{ comment.text }}<br>
+                        <small class="text-muted">{{ comment.created_at }}</small>
+                    </li>
+               {% endfor %}
+           </ul>
+        </div>
+      {% endif %}
+    </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+     const voteButton = document.getElementById('voteButton');
+    const votingForm = document.getElementById('votingForm');
+    const inputs = votingForm.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+
+        inputs.forEach(function (input) {
+          input.addEventListener('change', function () {
+              voteButton.disabled = false;
+            });
+        });
+
+       if (votingForm.querySelector('input[type="radio"]:checked, input[type="checkbox"]:checked')) {
+          voteButton.disabled = false;
+       }
+  });
+</script>
+{% endblock %}

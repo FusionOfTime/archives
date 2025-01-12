@@ -1,0 +1,19 @@
+{% extends "includes/base.html" %}
+
+{% block title %}Редактирование голосования{% endblock %}
+
+{% block content %}
+<div class="card mt-5">
+    <div class="card-body">
+        <h1 class="card-title text-center">Редактирование голосования</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="question">Вопрос:</label>
+                <input type="text" id="question" name="question" value="{{ voting.question }}" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
